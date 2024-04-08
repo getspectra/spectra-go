@@ -14,7 +14,7 @@ Inspired by [《How we built a custom permissions DSL at Figma》](https://www.f
 ## See also
 
 - [spectra-php](https://github.com/getspectra/spectra-php) for PHP
-- [spectra-go](https://github.com/getspectra/spectra-js) for JavaScript
+- [spectra-js](https://github.com/getspectra/spectra-js) for JavaScript
 
 ## Installing
 
