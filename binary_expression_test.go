@@ -1,6 +1,9 @@
 package spectra
 
-import "testing"
+import (
+	"encoding/json"
+	"testing"
+)
 
 func Test_BinaryExpression_Evaluate(t *testing.T) {
 	data := Data{
@@ -102,5 +105,19 @@ func Test_BinaryExpression_GetFields(t *testing.T) {
 
 	if fields[1] != "bar" {
 		t.Errorf("Expected bar, got %v", fields[1])
+	}
+}
+
+func Test_BinaryExpression_MarshalJSON(t *testing.T) {
+	b1 := &BinaryExpression{
+		left:      "foo",
+		operation: eq,
+		right:     "foo",
+	}
+
+	expected := `{"left":"foo","operation":"=","right":"foo"}`
+	jsonBytes, _ := json.Marshal(b1)
+	if string(jsonBytes) != expected {
+		t.Errorf("Expected %v, got %v", expected, string(jsonBytes))
 	}
 }

@@ -1,5 +1,7 @@
 package spectra
 
+import "encoding/json"
+
 type NotExpression struct {
 	expression Expression
 }
@@ -12,7 +14,10 @@ func (n *NotExpression) Evaluate(data Data) bool {
 	return !n.expression.Evaluate(data)
 }
 
-func (n *NotExpression) JsonSerialize() string {
-	//TODO implement me
-	panic("implement me")
+func (n *NotExpression) MarshalJSON() ([]byte, error) {
+	return json.Marshal(struct {
+		Not Expression `json:"not"`
+	}{
+		Not: n.expression,
+	})
 }

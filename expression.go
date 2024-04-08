@@ -12,5 +12,5 @@ type Definition any
 type Expression interface {
 	Evaluate(data Data) bool
 	GetFields() []FieldName
-	JsonSerialize() string
+	MarshalJSON() ([]byte, error)
 }

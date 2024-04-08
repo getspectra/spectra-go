@@ -1,6 +1,7 @@
 package spectra
 
 import (
+	"encoding/json"
 	"time"
 )
 
@@ -54,7 +55,14 @@ func (b *BinaryExpression) resolveRightValue(data Data) any {
 	return b.right
 }
 
-func (b *BinaryExpression) JsonSerialize() string {
-	//TODO implement me
-	panic("implement me")
+func (b *BinaryExpression) MarshalJSON() ([]byte, error) {
+	return json.Marshal(struct {
+		Left      FieldName  `json:"left"`
+		Operation Operation  `json:"operation"`
+		Right     FieldValue `json:"right"`
+	}{
+		Left:      b.left,
+		Operation: b.operation,
+		Right:     b.right,
+	})
 }

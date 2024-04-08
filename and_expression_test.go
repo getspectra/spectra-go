@@ -1,6 +1,9 @@
 package spectra
 
-import "testing"
+import (
+	"encoding/json"
+	"testing"
+)
 
 func Test_AndExpression_Evaluate(t *testing.T) {
 	true1 := &BinaryExpression{
@@ -113,5 +116,23 @@ func Test_AndExpression_GetFields(t *testing.T) {
 
 	if len(and3.GetFields()) != 3 && and3.GetFields()[0] != "user.id" && and3.GetFields()[1] != "user.name" && and3.GetFields()[2] != "user.age" {
 		t.Error("AndExpression should return user.id, user.name and user.age")
+	}
+}
+
+func Test_AndExpression_MarshalJSON(t *testing.T) {
+	expression1 := &BinaryExpression{
+		left:      "user.id",
+		operation: eq,
+		right:     1,
+	}
+
+	and1 := &AndExpression{
+		expressions: []Expression{expression1},
+	}
+
+	expected := `{"and":[{"left":"user.id","operation":"=","right":1}]}`
+	jsonBytes, _ := json.Marshal(and1)
+	if string(jsonBytes) != expected {
+		t.Errorf("Expected %s, got %s", expected, string(jsonBytes))
 	}
 }

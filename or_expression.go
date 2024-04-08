@@ -1,15 +1,23 @@
 package spectra
 
+import "encoding/json"
+
 type OrExpression struct {
 	expressions []Expression
 }
 
 func (o *OrExpression) GetFields() []FieldName {
-	fields := make([]FieldName, 0)
+	fields := make(map[FieldName]bool)
 	for _, expression := range o.expressions {
-		fields = append(fields, expression.GetFields()...)
+		for _, field := range expression.GetFields() {
+			fields[field] = true
+		}
 	}
-	return fields
+	output := make([]FieldName, 0, len(fields))
+	for field := range fields {
+		output = append(output, field)
+	}
+	return output
 }
 
 func (o *OrExpression) Evaluate(data Data) bool {
@@ -22,7 +30,10 @@ func (o *OrExpression) Evaluate(data Data) bool {
 	return false
 }
 
-func (o *OrExpression) JsonSerialize() string {
-	//TODO implement me
-	panic("implement me")
+func (o *OrExpression) MarshalJSON() ([]byte, error) {
+	return json.Marshal(struct {
+		Or []Expression `json:"or"`
+	}{
+		Or: o.expressions,
+	})
 }

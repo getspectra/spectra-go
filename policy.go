@@ -1,5 +1,7 @@
 package spectra
 
+import "encoding/json"
+
 const (
 	Allow Effect = "allow"
 	Deny  Effect = "deny"
@@ -47,6 +49,16 @@ func (p *Policy) Apply(data Data) bool {
 	return p.GetFilter().Evaluate(data)
 }
 
-func (p *Policy) JsonSerialize() string {
-	panic("implement me")
+func (p *Policy) MarshalJSON() ([]byte, error) {
+	return json.Marshal(struct {
+		Description string     `json:"description"`
+		Effect      Effect     `json:"effect"`
+		Expression  Expression `json:"filter"`
+		Permissions []string   `json:"permissions"`
+	}{
+		Description: p.description,
+		Effect:      p.effect,
+		Expression:  p.expression,
+		Permissions: p.permissions,
+	})
 }
